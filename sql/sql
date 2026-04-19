@@ -1,0 +1,138 @@
+01_clean_viewer.sql
+
+CREATE OR REPLACE TABLE tv_viewer_clean AS
+SELECT
+    UserID,
+    Channel2 AS Channel,
+    TO_TIMESTAMP(RecordDate2) AS Record_Timestamp,
+    CAST(`Duration 2` AS STRING) AS Duration_Text,
+
+    (
+        SPLIT(CAST(`Duration 2` AS STRING), ':')[0] * 3600 +
+        SPLIT(CAST(`Duration 2` AS STRING), ':')[1] * 60 +
+        SPLIT(CAST(`Duration 2` AS STRING), ':')[2]
+    ) AS Duration_Seconds
+
+FROM Viewership
+WHERE UserID IS NOT NULL;
+
+2. 02_clean_profile.sql
+
+CREATE OR REPLACE TABLE tv_profile_clean AS
+SELECT
+    UserID,
+    Name,
+    Surname,
+    Gender,
+    Race,
+    Age,
+
+    CASE
+        WHEN Province = 'Kwazulu Natal' THEN 'KwaZulu-Natal'
+        ELSE Province
+    END AS Province,
+
+    `Social Media Handle` AS Social_Media_Handle,
+
+    CASE
+        WHEN Age BETWEEN 18 AND 24 THEN '18-24'
+        WHEN Age BETWEEN 25 AND 34 THEN '25-34'
+        WHEN Age BETWEEN 35 AND 44 THEN '35-44'
+        WHEN Age BETWEEN 45 AND 54 THEN '45-54'
+        ELSE '55+'
+    END AS Age_Group
+
+FROM `User Profiles`
+WHERE UserID IS NOT NULL;
+
+3. 03_join.sql
+  
+CREATE OR REPLACE TABLE brighttv_analysis AS
+SELECT
+    v.UserID,
+    v.Channel,
+    v.Record_Timestamp,
+    v.Duration_Text,
+    v.Duration_Seconds,
+
+    p.Name,
+    p.Surname,
+    p.Gender,
+    p.Race,
+    p.Age,
+    p.Age_Group,
+    p.Province,
+    p.Social_Media_Handle
+
+FROM tv_viewer_clean v
+LEFT JOIN tv_profile_clean p
+    ON v.UserID = p.UserID;
+
+4. 04_features.sql
+  
+CREATE OR REPLACE TABLE brighttv_analysis_final AS
+SELECT
+    *,
+
+    TO_DATE(Record_Timestamp) AS View_Date,
+    DATE_FORMAT(Record_Timestamp, 'HH:mm:ss') AS View_Time,
+    DATE_FORMAT(Record_Timestamp, 'EEEE') AS Day_Name,
+
+    CASE
+        WHEN DAYOFWEEK(Record_Timestamp) IN (1, 7) THEN 'Weekend'
+        ELSE 'Weekday'
+    END AS Day_Type,
+
+    CASE
+        WHEN HOUR(Record_Timestamp) BETWEEN 6 AND 11 THEN 'Morning'
+        WHEN HOUR(Record_Timestamp) BETWEEN 12 AND 17 THEN 'Afternoon'
+        WHEN HOUR(Record_Timestamp) BETWEEN 18 AND 22 THEN 'Prime Time'
+        ELSE 'Late Night'
+    END AS Time_Period,
+
+    ROUND(Duration_Seconds / 60.0, 2) AS Duration_Minutes,
+
+    CASE
+        WHEN Duration_Seconds > 600 THEN 'High'
+        WHEN Duration_Seconds BETWEEN 120 AND 600 THEN 'Medium'
+        ELSE 'Low'
+    END AS Viewing_Intensity
+FROM brighttv_analysis;
+
+5. 05_master_summary.sql
+  
+CREATE OR REPLACE TABLE brighttv_master_summary AS
+SELECT
+    Channel,
+    Province,
+    Gender,
+    Race,
+    Age_Group,
+    Day_Name,
+    Day_Type,
+    Time_Period,
+
+    COUNT(*) AS Total_Views,
+    COUNT(DISTINCT UserID) AS Unique_Viewers,
+
+    ROUND(SUM(Duration_Minutes), 2) AS Total_Minutes,
+    ROUND(SUM(Duration_Minutes) / 60, 2) AS Total_Hours,
+    ROUND(AVG(Duration_Minutes), 2) AS Avg_Minutes_Per_View,
+
+    ROUND(MAX(Duration_Minutes), 2) AS Max_Session_Minutes,
+    ROUND(MIN(Duration_Minutes), 2) AS Min_Session_Minutes,
+
+    SUM(CASE WHEN Viewing_Intensity = 'High' THEN 1 ELSE 0 END) AS High_Engagement_Views,
+    SUM(CASE WHEN Viewing_Intensity = 'Medium' THEN 1 ELSE 0 END) AS Medium_Engagement_Views,
+    SUM(CASE WHEN Viewing_Intensity = 'Low' THEN 1 ELSE 0 END) AS Low_Engagement_Views
+
+FROM brighttv_analysis_final
+GROUP BY
+    Channel,
+    Province,
+    Gender,
+    Race,
+    Age_Group,
+    Day_Name,
+    Day_Type,
+    Time_Period;
