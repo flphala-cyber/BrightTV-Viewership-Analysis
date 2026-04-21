@@ -1,142 +1,131 @@
-# 📺 BrightTV Viewership Analysis
+📺 BrightTV Viewership Analysis
+🚀 End-to-End Data Analytics Project | SQL • Excel • Dashboarding
 
-## 🎯 Objective
+👉 Live Interactive Dashboard:
+https://brightview-insights.lovable.app
 
-Analyze BrightTV viewership data to understand audience behavior, content performance, and engagement patterns, and provide actionable insights for Customer Value Management (CVM).
+🧠 Project Summary
 
----
+This project analyzes TV audience behavior to uncover how viewers engage with content across channels, demographics, geography, and time.
 
-## ❓ Key Business Questions
+The analysis transforms raw data into business-ready insights that can help media companies:
 
-* Which channels generate the highest viewing hours?
-* Which audience segments (age, province) are most active?
-* What are the peak viewing days?
-* Which time periods drive the most engagement?
-* How engaged are viewers across different content?
+Optimize programming schedules
+Improve audience targeting
+Maximize viewer engagement
+💼 Business Problem
 
----
+TV networks need to understand:
 
-## 🗂️ Data Sources
+Which channels perform best
+Who their audience really is
+When viewers are most active
+Where their strongest markets are
 
-This project uses two primary datasets:
+Without this, decisions are based on guesswork instead of data.
 
-* **User Profiles**
+🎯 Solution
 
-  * UserID, Age, Gender, Race, Province
-* **Viewership Data**
+Built a complete analytics pipeline that:
 
-  * UserID, Channel, Record Date & Time, Duration
+Cleans and structures raw data using SQL
+Creates meaningful features (time, segments, categories)
+Analyzes audience patterns across multiple dimensions
+Delivers insights through a professional dashboard
+📊 Live Dashboard
 
----
+🔗 Explore the Dashboard:
+👉 https://brightview-insights.lovable.app
 
-## 🛠️ Tools & Technologies
-
-* **SQL (Databricks)** → Data cleaning, transformation, aggregation
-* **Excel** → Pivot tables and data analysis
-* **Canva / PowerPoint** → Presentation and visualization
-* **Miro** → Data architecture and workflow design
-
----
-
-## ⚙️ Data Processing Workflow
-
-1. **Data Cleaning**
-
-   * Renamed columns (Channel2 → Channel)
-   * Converted timestamps
-   * Converted duration to seconds/minutes
-
-2. **Profile Cleaning**
-
-   * Standardized province names
-   * Created age groups
-
-3. **Data Integration**
-
-   * Joined viewership and profile datasets using UserID
-
-4. **Feature Engineering**
-
-   * Day_Name (Monday–Sunday)
-   * Day_Type (Weekday/Weekend)
-   * Time_Period (Morning, Afternoon, Prime Time, Late Night)
-   * Viewing_Intensity (High, Medium, Low)
-
-5. **Aggregation**
-
-   * Created master summary table with key metrics:
-
-     * Total Views
-     * Unique Viewers
-     * Total Hours
-     * Engagement levels
-
----
-
-## 📊 Analysis & Dashboard
-
-The analysis focuses on:
-
-* **Content Performance** → Channel-level insights
-* **Audience Segmentation** → Age group & demographics
-* **Geographic Analysis** → Province-level performance
-* **Behavioral Analysis** → Day and time patterns
-* **Engagement Analysis** → Viewer intensity levels
-
-Dashboard outputs are available in the `dashboard/` folder.
-
----
-
-## 📁 Project Structure
-
-```bash
+What the dashboard shows:
+📺 Channel Performance
+👥 Audience Age Distribution
+🌍 Provincial Viewership
+⏰ Peak Viewing Time (Day & Hour Heatmap)
+📈 Viewing Trends Over Time
+🧱 Data Pipeline Architecture
+Raw Data → Cleaning → Joining → Feature Engineering → Analysis → Visualization
+Detailed Flow:
+Data Cleaning
+Removed nulls and inconsistencies
+Standardized formats
+Data Joining
+Combined viewer + profile datasets
+Feature Engineering
+Extracted hour, day, time segments
+Created analytical fields
+Analysis Layer
+Aggregations and grouping
+KPI generation
+Visualization
+Dashboard (Lovable)
+Charts (Excel)
+🗂️ Project Structure
 BrightTV-Viewership-Analysis/
 │
-├── data/                # Raw dataset
-├── sql/                 # SQL scripts
-├── dashboard/           # Pivot tables & charts
-├── presentation/        # Slides (PPT)
-├── miro/                # Workflow diagram
-└── README.md
-```
+├── 📁 sql/
+│   ├── 01_clean_viewer.sql
+│   ├── 02_clean_profile.sql
+│   ├── 03_join.sql
+│   ├── 04_features.sql
+│   └── 05_master_summary.sql
+│
+├── 📁 dashboard/
+│   ├── pivot_tables.xlsx
+│   └── charts.png
+│
+├── 📁 presentation/
+│   ├── BrightTV_Presentation.pptx
+│   └── BrightTV_Report.pdf
+│
+└── 📁 miro/
+    └── workflow.png
+⚙️ Tech Stack
+Tool	Purpose
+SQL	Data cleaning, joins, transformations
+Excel	Pivot tables & exploratory analysis
+Lovable	Interactive dashboard
+Miro	Data architecture planning
+PowerPoint	Presentation
+📈 Key Insights
+📺 A small number of channels drive the majority of viewership
+👥 Specific age groups dominate viewing patterns
+🌍 Viewership varies significantly across provinces
+⏰ Peak engagement occurs at consistent time windows
+📊 Viewer behavior follows strong daily trends
+💡 Business Recommendations
+Invest in high-performing channels
+Target marketing toward dominant age segments
+Schedule premium content during peak hours
+Customize content for top-performing regions
+📸 Dashboard Preview
 
----
+(Replace with your actual screenshot)
 
-## 📈 Key Insights
+![Dashboard Preview](dashboard/charts.png)
+🚀 How to Run This Project
+git clone https://github.com/flphala-cyber/BrightTV-Viewership-Analysis.git
+Steps:
+Run SQL scripts in order:
+Clean → Join → Feature → Summary
+Open Excel dashboard
+Or use the live dashboard
+📌 What Makes This Project Strong
 
-* 📺 Sports and live event channels dominate viewing hours
-* 📅 Weekend viewing is highest, especially Saturday
-* ⏰ Afternoon and Prime Time are peak viewing periods
-* 👥 The 25–44 age group is the core audience
-* 📍 Gauteng leads in overall viewership
+✅ End-to-end data workflow
+✅ Real business problem solving
+✅ Clean SQL structure
+✅ Interactive dashboard
+✅ Clear insights & recommendations
+✅ Portfolio-ready presentation
 
----
+🔮 Future Improvements
+Add real-time data pipeline
+Build Power BI / Tableau version
+Add predictive analytics (forecasting)
+Deploy as a full web analytics app
+👤 Author
 
-## 💡 Recommendations
-
-* Invest more in **sports and live event content**
-* Focus marketing efforts on **weekends**
-* Target the **25–44 audience segment**
-* Optimize scheduling for **Afternoon and Prime Time**
-* Develop strategies to improve **low engagement users**
-
----
-
-## 🚀 Project Outcome
-
-This project demonstrates:
-
-* Data cleaning and transformation
-* SQL-based analysis
-* Feature engineering
-* Data aggregation
-* Dashboard creation
-* Business insight generation
-
----
-
-## 👤 Author
-
-**Frans Phala**
-Aspiring Data Analyst | SQL | Excel | Data Visualization
-
+Frans Phala
+🎯 Aspiring Data Analyst (Transitioning from 15 years in Video Editing)
+📊 Passionate about turning data into insights
