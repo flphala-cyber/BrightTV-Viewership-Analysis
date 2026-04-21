@@ -129,3 +129,4 @@ Deploy as a full web analytics app
 Frans Phala
 🎯 Aspiring Data Analyst (Transitioning from 15 years in Video Editing)
 📊 Passionate about turning data into insights
+
